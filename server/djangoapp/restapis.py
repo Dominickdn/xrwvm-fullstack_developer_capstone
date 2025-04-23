@@ -42,10 +42,14 @@ def post_review(data_dict):
     request_url = backend_url + "/insert_review"
     try:
         response = requests.post(request_url, json=data_dict)
+        # Will raise an HTTPError for bad responses (4xx, 5xx)
+        response.raise_for_status()
         print(response.json())
         return response.json()
-    except:
-        print("Network exception occurred")
+    except requests.exceptions.RequestException as e:
+        # This will catch network-related
+        # errors, including timeout, connection, etc.
+        print(f"Network exception occurred: {e}")
 
 
 # Add code for posting review
